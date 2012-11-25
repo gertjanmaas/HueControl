@@ -1,0 +1,26 @@
+<%! import cherrypy %>
+<script>
+function updateSlider(value)
+{
+    document.getElementById('offset').innerHTML=value;
+}
+
+function saveConfiguration()
+{
+    loc = document.getElementById('location').value;
+    val = parseInt(document.getElementById('offset_value').value);
+
+    $.post('${cherrypy.url('save')}', { location: loc, offset: val }, null);
+}
+</script>
+
+<h2>AutoOn Configuration</h2>
+
+<b>Location</b><br />
+<input type="text" name="location" id="location" value="${config['city']}" /> <br />
+<br />
+<b>Time Offset</b><br />
+<span id='offset'>${config['offset']}</span> minutes <br />
+<input type="range" min="-180" max="180" step="5" value="${config['offset']}" onchange="updateSlider(this.value)" id="offset_value" /><br />
+<br />
+<input type="button" name="Save" value="Save" id="Save" onclick="saveConfiguration()" />

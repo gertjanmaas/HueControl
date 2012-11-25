@@ -1,0 +1,59 @@
+<%! import cherrypy %>
+<h2>Lamp Control</h2>
+<table>
+<tr>
+    <td><b>State</b></td>
+    <td><b>Color</b></td>
+    <td><b>Name</b></td>
+    <td><b>Type</b></td>
+</tr>
+%for l in lights:
+<tr>
+    <td style='text-align: center'>
+    <a href="#">
+    %if lights[l].on:
+        <img src="${cherrypy.url('/media/images/icon-light-on.png')}" onclick="javascript:set_light('${l}', 'on', 'false')"/>
+    %else:
+        <img src="${cherrypy.url('/media/images/icon-light-off.png')}" onclick="javascript:set_light('${l}', 'on', 'true')" />
+    %endif
+    </a>
+    </td>
+    <td>
+    %if lights[l].type.lower().find("color light") != -1:
+    <%! import colorsys %>
+    <%
+    r,g,b = colorsys.hsv_to_rgb(float(lights[l].hue)/65535, float(lights[l].sat)/255, float(lights[l].bri)/255)
+    r = int(r * 255)
+    g = int(g * 255)
+    b = int(b * 255)
+    %>
+        <div style='margin:auto;width:10px;height:10px;background-color:rgb(${r}, ${g}, ${b});border:1px solid black'>&nbsp;</div>
+    %else:
+        <div style='margin:auto;width:10px;height:10px;background-color:rgb(${lights[l].bri},${lights[l].bri},${lights[l].bri});border:1px solid black'>&nbsp;</div>
+    %endif
+    </td>
+    <td><b>${l}</b></td>
+    <td>${lights[l].type}</td>
+</tr>
+%endfor
+</table>
+<h2>Groups</h2>
+<table>
+<tr>
+<td colspan="2"><b>On/Off<b/></td>
+<td><b>Group Name<b/></td>
+</tr>
+%for g in groups:
+<tr>
+    <td>
+        <img src="${cherrypy.url('/media/images/icon-light-on.png')}" onclick="javascript:set_group('${g}', 'on', 'false')"/>
+    </td>
+    <td>
+        <img src="${cherrypy.url('/media/images/icon-light-off.png')}" onclick="javascript:set_group('${g}', 'on', 'true')" />
+    </td>
+    <td><b>${g}</b></td>
+</tr>
+%endfor
+</table>
+<font size="1">This may take a while to update...</font>
+</div>

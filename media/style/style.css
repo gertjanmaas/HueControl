@@ -1,0 +1,54 @@
+html,body {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #F0F0ED;
+    color:#33383D;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+}
+h1 {
+    font-size: 32px;
+    font-weight: bold;
+}
+a {
+    color: #33383D;
+    text-decoration: none;
+}
+a:hover {
+    color: #4090BA;
+}
+.header {
+    background-color: #33363B;
+    margin: 0;
+    padding-left: 10px;
+    color: white;
+}
+div {
+    padding: 3px;
+}
+.error {
+    color: red;
+    font-weight: bold;
+    font-size: 22px;
+}
+ul {
+    padding:0;
+    padding-left:18px;
+    margin:0:
+}
+.menu {
+    float: left;
+    margin-left: 10px;
+    width:150px;
+    display: block;
+}
+.content {
+    display: block;
+    margin-left: 166px;
+    margin-right: auto;
+}
+table,tr,td {
+    font-size: 12px;
+}
