@@ -7,6 +7,9 @@ class _ConfigurationServer(object):
     def __init__(self):
         self.configs = {}
         self.data_dir = os.path.join(os.path.dirname(__file__), 'data')
+        if not os.path.exists(self.data_dir):
+            os.mkdir(self.data_dir)
+            
         for data in glob.glob(os.path.join(self.data_dir, '*.dat')):
             data_name = os.path.splitext(os.path.basename(data))[0]
             cherrypy.log('Found configuration data for: {}'.format(data_name))

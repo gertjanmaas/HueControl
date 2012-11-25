@@ -46,10 +46,14 @@
 %for g in groups:
 <tr>
     <td>
+        <a href="#">
         <img src="${cherrypy.url('/media/images/icon-light-on.png')}" onclick="javascript:set_group('${g}', 'on', 'false')"/>
+        </a>
     </td>
     <td>
+        <a href="#">
         <img src="${cherrypy.url('/media/images/icon-light-off.png')}" onclick="javascript:set_group('${g}', 'on', 'true')" />
+        </a>
     </td>
     <td><b>${g}</b></td>
 </tr>
