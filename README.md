@@ -19,7 +19,7 @@ Dependencies
 Installation
 ------------
 
-Just clone, edit config.py and run StartHueControl.py.
+Just clone, run StartHueControl.py and open the webpage @ http://localhost:8282.
 
 Plugins
 -------
@@ -40,7 +40,6 @@ For now take a look at plugins/AutoOn and plugins/HueControl.
 
 To do list of things to do:
 ---------------------------
-* Automatic bridge discovery (via UPNP)
 * Improve and document interfaces to the plugins (HueBridge, Scheduler, Template, ConfigurationServer)
 * Group management (create, edit and deletion)
 * Better web interface...
