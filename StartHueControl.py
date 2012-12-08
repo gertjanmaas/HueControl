@@ -5,19 +5,46 @@ sys.path.append('hue')
 
 import os
 import cherrypy
-from Plugins import Plugins
-from HueBridge import HueBridge
+import SSDP
+
 from Scheduler import Scheduler
 
 class HueControlStartup(object):
     def __init__(self):
+        self.loaded = False
+    
+    def startup(self, bridge_ip):
+        from Plugins import Plugins
+        from HueBridge import HueBridge
+        HueBridge.init(bridge_ip)
         HueBridge.update()
         self.plugins = Plugins #expose it for cherrypy
         # Automatically update every minute
         Scheduler.add_interval_job(HueBridge.update, minutes=1)
 
     def index(self):
-        return Plugins.HueControl.index()
+        if not self.loaded:
+            # find bridge and load
+            resp = SSDP.discover()
+            content = ''
+            bridges = []
+            for r in resp:
+                server = resp[r].getheader('server')
+                if server != None and server.find('IpBridge'):
+                    bridges.append(r[0])
+                    
+            if len(bridges) == 1:
+                # we only found one bridge, use it!
+                cherrypy.log("Found bridge @ {}".format(bridges[0]))
+                self.startup(bridges[0])
+                self.loaded = True
+                content = self.plugins.HueControl.index()
+            else:
+                return "More than one bridge found. We (currently) do not support multiple bridges!"
+            
+            return content
+        else:
+            return self.plugins.HueControl.index()
         
     index.exposed = True
         

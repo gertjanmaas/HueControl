@@ -1,4 +1,3 @@
-import config
 import simplejson
 import httplib2
 import urllib
@@ -52,13 +51,14 @@ class Connection:
 
 class _HueBridge:
     def __init__(self):
-        self.IP = self.discover()
-        self.conn = Connection(self.IP)
+        self.IP = None
+        self.conn = None
         self.lights = {}
         self.groups = {}
         
-    def discover(self):
-        return config.IP_HUE_BRIDGE
+    def init(self, ip):
+        self.IP = ip
+        self.conn = Connection(self.IP)
         
     def authenticate(self):
         return self.conn.authenticate("HueControl")
