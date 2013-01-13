@@ -25,7 +25,15 @@ class AutoOn(object):
                 'long': 0,
                 'city': 'Enter a city here...',
                 'offset': 0,
+                'autoOnGroup': 'All Lights',
+                'groupBri': 255,
             }
+        else:
+            if not 'autoOnGroup' in self.config.keys():
+                self.config['autoOnGroup'] = 'All Lights'
+            if not 'groupBri' in self.config.keys():
+                self.config['groupBri'] = 255
+                
         minute = random.randint(0,59)
         start_date = datetime.datetime.combine(datetime.datetime.today(), datetime.time(hour=12, minute=minute, second=0)) #added randomness to not break earthtools :)
         if start_date < datetime.datetime.now():
@@ -51,11 +59,17 @@ class AutoOn(object):
                     Scheduler.add_date_job(self.turn_lights_on, sunset_datetime)
     
     def turn_lights_on(self):
-        HueBridge.set_group(0, 'on', 'true')
+        if self.config['autoOnGroup'] in HueBridge.groups.keys():
+            HueBridge.set_group(HueBridge.groups[self.config['autoOnGroup']], 'bri', self.config['groupBri'])
+            HueBridge.set_group(HueBridge.groups[self.config['autoOnGroup']], 'on', 'true')
+        else:
+            cherrypy.log("AutoOn: group {} not found! Cannot turn lights on!".format(self.config['autoOnGroup']))
     
     def save(self, **jsonData):
         loc = jsonData['location']
         offset = int(jsonData['offset'])
+        group = jsonData['autoOnGroup']
+        bri = int(jsonData['groupBri'])
         geocode_url = "https://maps.googleapis.com/maps/api/geocode/json?address={}&sensor=false".format(urllib2.quote(loc))
         req = urllib2.urlopen(geocode_url)
         resp = simplejson.loads(req.read())
@@ -63,11 +77,13 @@ class AutoOn(object):
         self.config['long'] = resp['results'][0]['geometry']['location']['lng']
         self.config['city'] = loc
         self.config['offset'] = offset
+        self.config['autoOnGroup'] = group
+        self.config['groupBri'] = bri
         ConfigurationServer.save('AutoOn', self.config)
     
     def index(self):
         template = mako.template.Template(filename='plugins/AutoOn/AutoOn.tmpl')
-        rendered_template = template.render(config=self.config)
+        rendered_template = template.render(config=self.config, groups=HueBridge.groups)
         return Template.render_template(rendered_template)
     
     save.exposed = True
