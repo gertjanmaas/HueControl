@@ -6,6 +6,7 @@ sys.path.append('hue')
 import os
 import cherrypy
 import SSDP
+import httplib2
 
 from Scheduler import Scheduler
 
@@ -28,20 +29,26 @@ class HueControlStartup(object):
             resp = SSDP.discover()
             content = ''
             bridges = []
+            http = httplib2.Http()
             for r in resp:
-                server = resp[r].getheader('server')
-                if server != None and server.find('IpBridge'):
-                    bridges.append(r[0])
-                
-            # TODO: Make a menu to select one of multiple bridges, for now just use the first one you find.
-            #if len(bridges) == 1:
-            # we only found one bridge, use it!
-            cherrypy.log("Found bridge @ {}".format(bridges[0]))
-            self.startup(bridges[0])
-            self.loaded = True
-            content = self.plugins.HueControl.index()
-            #else:
-            #    return "More than one bridge found. We (currently) do not support multiple bridges!"
+                loc = resp[r].getheader('location')
+                if loc != None:
+                    resp, desc = http.request(loc, method="GET")
+                    if resp['status'] == '200' and 'Philips hue' in desc:
+                        bridges.append(r[0])
+                        
+            if len(bridges) > 0:    
+                # TODO: Make a menu to select one of multiple bridges, for now just use the first one you find.
+                #if len(bridges) == 1:
+                # we only found one bridge, use it!
+                cherrypy.log("Found bridge @ {}".format(bridges[0]))
+                self.startup(bridges[0])
+                self.loaded = True
+                content = self.plugins.HueControl.index()
+                #else:
+                #    return "More than one bridge found. We (currently) do not support multiple bridges!"
+            else:
+                content = "No bridges found!"
                             
             return content
         else:
