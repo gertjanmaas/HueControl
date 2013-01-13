@@ -54,4 +54,4 @@ def discover(timeout=1, retries=5):
 if __name__ == '__main__':
     resp = discover()
     for r in resp:
-        print resp[r].getheader('')
+        print r, resp[r].getheader('server')
