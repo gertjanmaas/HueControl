@@ -31,11 +31,13 @@ class HueControlStartup(object):
             bridges = []
             http = httplib2.Http()
             for r in resp:
-                loc = resp[r].getheader('location')
-                if loc != None:
-                    resp, desc = http.request(loc, method="GET")
-                    if resp['status'] == '200' and 'Philips hue' in desc:
-                        bridges.append(r[0])
+                # Maybe this fixed the KeyError seen in http://www.everyhue.com/?page_id=38#/discussion/comment/1728 ?
+                if r in resp.keys():
+                    loc = resp[r].getheader('location')
+                    if loc != None:
+                        resp, desc = http.request(loc, method="GET")
+                        if resp['status'] == '200' and 'Philips hue' in desc:
+                            bridges.append(r[0])
                         
             if len(bridges) > 0:    
                 # TODO: Make a menu to select one of multiple bridges, for now just use the first one you find.
