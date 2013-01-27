@@ -26,7 +26,7 @@ Plugins
 
 Included plugins:
 * HueControl
-    * Index page, allows quick control on yoru lights)
+    * Index page, allows quick control on your lights)
 * AutoOn 
     * Automatically turns on your lights when it gets dark outside (based on sunset times from http://www.earthtools.org)
 
