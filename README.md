@@ -20,6 +20,8 @@ Installation
 ------------
 
 Just clone, run StartHueControl.py and open the webpage @ http://localhost:8282.
+Make sure you run it in the background by running python StartHueControl.py & (include the &).
+It then backgrounds the proces and gives you a job number. By doing a fg (jobnr) you get your process back.
 
 Plugins
 -------
