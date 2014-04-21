@@ -37,8 +37,8 @@ class HueControlStartup(object):
                     if r in resp.keys():
                         loc = resp[r].getheader('location')
                         if loc != None:
-                            resp, desc = http.request(loc, method="GET")
-                            if resp['status'] == '200' and 'Philips hue' in desc:
+                            response, desc = http.request(loc, method="GET")
+                            if response['status'] == '200' and 'Philips hue' in desc:
                                 bridges.append(r[0])
             except KeyError as e:
                 cherrypy.log("KeyError during parsing of SSDP responses on key: {0}".format(e.message))

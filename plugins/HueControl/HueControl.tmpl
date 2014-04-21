@@ -12,9 +12,9 @@
     <td style='text-align: center'>
     <a href="#">
     %if lights[l].on:
-        <img src="${cherrypy.url('/media/images/icon-light-on.png')}" onclick="javascript:set_light('${l}', 'on', 'false')"/>
+        <img src="${cherrypy.url('/media/images/icon-light-on.png')}" onclick="javascript:set_light('${l}', 'on', this)" />
     %else:
-        <img src="${cherrypy.url('/media/images/icon-light-off.png')}" onclick="javascript:set_light('${l}', 'on', 'true')" />
+        <img src="${cherrypy.url('/media/images/icon-light-off.png')}" onclick="javascript:set_light('${l}', 'on', this)" />
     %endif
     </a>
     </td>
